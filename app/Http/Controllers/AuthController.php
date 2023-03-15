@@ -57,7 +57,7 @@ class AuthController extends Controller
         return response()->json('salam qaqas', 201);
     }
 
-    public function useriSetEle(Request $request): JsonResponse
+    public function saveUserInfo(Request $request): JsonResponse
     {
         $request->validate([
             'name' => 'required',
@@ -78,5 +78,9 @@ class AuthController extends Controller
         Auth::guard('web')->logout();
         $request->session()->flush();
         return $this->success('Log out edildi');
+    }
+
+    public function checkLogin(){
+        return $this->success('true');
     }
 }

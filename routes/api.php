@@ -17,12 +17,13 @@ use \App\Http\Controllers\AuthController;
 
 
 Route::middleware('auth:sanctum')->group(function (){
-    Route::get('/user', [AuthController::class, 'getUsers']);
-    Route::post('/logOut', [AuthController::class, 'logOut']);
+    Route::get('/auth/user', [AuthController::class, 'getUsers']);
+    Route::post('/auth/logOut', [AuthController::class, 'logOut']);
+    Route::get('/auth/checkLogin', [AuthController::class, 'checkLogin']);
 });
 
 
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/signup', [AuthController::class, 'useriSetEle']);
+Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/signup', [AuthController::class, 'saveUserInfo']);
 Route::get('/ilkin', [AuthController::class, 'ilkin']);
