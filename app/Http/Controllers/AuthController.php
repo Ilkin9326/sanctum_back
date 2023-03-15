@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -32,10 +33,8 @@ class AuthController extends Controller
         $user = User::where('email', $request->input('email'))->first();
 
         // Check Password
-        if(!$user || !Hash::check($request->input('password'), $user->password)){
-            return response([
-                'message' => 'Invalid Login'
-            ], 401);
+        if(!$user || !Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])){
+            return $this->error(null, 'Invalid credentials', 401);
         }
 
         // Delete old tokens
@@ -47,7 +46,7 @@ class AuthController extends Controller
         $accessToken = $user->createToken('access_token', ['server:update'])->plainTextToken;*/
 
         //$cookie = cookie('angular', $accessToken, 15); // 1 week 60 * 24 * 7
-        $request->session()->regenerate();
+        //$request->session()->regenerate();
 
 
         // Return user, token and set refresh cookie
@@ -73,5 +72,11 @@ class AuthController extends Controller
             [$request->input('name'), $request->input('email'), $pasword]);
 
         return $this->success($userStoreInfo, "Ugurlar qeyd olundu", 200);
+    }
+
+    public function logOut(Request $request): JsonResponse{
+        Auth::guard('web')->logout();
+        $request->session()->flush();
+        return $this->success('Log out edildi');
     }
 }
