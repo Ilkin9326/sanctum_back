@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,14 +14,11 @@ use \App\Http\Controllers\AuthController;
 |
 */
 
-
-Route::middleware('auth:sanctum')->group(function (){
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/user', [AuthController::class, 'getUsers']);
     Route::post('/auth/logOut', [AuthController::class, 'logOut']);
     Route::get('/auth/checkLogin', [AuthController::class, 'checkLogin']);
 });
-
-
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/signup', [AuthController::class, 'saveUserInfo']);

@@ -14,26 +14,27 @@ use Symfony\Component\HttpFoundation\Cookie;
 class AuthController extends Controller
 {
     use HttpResponses;
-    public function getUsers():JsonResponse{
-        $strSql = "select u.id, u.name, u.email from users u ";
+
+    public function getUsers(): JsonResponse
+    {
+        $strSql = 'select u.id, u.name, u.email from users u ';
         $data = DB::select($strSql);
+
         return $this->success($data);
     }
 
     public function login(Request $request)
     {
-
         /*$fields = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);*/
 
-
         // Check email
         $user = User::where('email', $request->input('email'))->first();
 
         // Check Password
-        if(!$user || !Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])){
+        if (! $user || ! Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
             return $this->error(null, 'Invalid credentials', 401);
         }
 
@@ -48,12 +49,14 @@ class AuthController extends Controller
         //$cookie = cookie('angular', $accessToken, 15); // 1 week 60 * 24 * 7
         //$request->session()->regenerate();
 
-
         // Return user, token and set refresh cookie
         return $this->success('success');
     }
 
-    public function ilkin(): JsonResponse{
+    public function ilkin(): JsonResponse
+    {
+        $user = User::all();
+        ds($user);
         return response()->json('salam qaqas', 201);
     }
 
@@ -62,25 +65,27 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users',
-            'password' => 'required'
+            'password' => 'required',
         ]);
-
 
         $pasword = Hash::make($request->input('password'));
 
         $userStoreInfo = DB::insert('insert into users(name, email, password) values(?,?,?)',
             [$request->input('name'), $request->input('email'), $pasword]);
 
-        return $this->success($userStoreInfo, "Ugurlar qeyd olundu", 200);
+        return $this->success($userStoreInfo, 'Ugurlar qeyd olundu', 200);
     }
 
-    public function logOut(Request $request): JsonResponse{
+    public function logOut(Request $request): JsonResponse
+    {
         Auth::guard('web')->logout();
         $request->session()->flush();
+
         return $this->success('Log out edildi');
     }
 
-    public function checkLogin(){
+    public function checkLogin()
+    {
         return $this->success('true');
     }
 }

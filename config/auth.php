@@ -44,7 +44,7 @@ return [
         'api' => [
             'driver' => 'session',
             'provider' => 'users',
-            'hash' => true
+            'hash' => true,
         ],
     ],
 

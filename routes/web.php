@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,8 +17,6 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('welcome');
 });
-
-
 
 /*Route::middleware(['auth.session'])->group(function () {
     Route::get('/user', function () {
